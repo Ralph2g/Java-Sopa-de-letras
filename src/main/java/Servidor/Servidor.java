@@ -1,5 +1,5 @@
 package Servidor;
-import Palabras.Lista;
+import Palabras.Palabras;
 import java.net.*;
 import java.io.*;
 public class Servidor{
@@ -33,18 +33,15 @@ public class Servidor{
         try {
             //Creamos el socket
             ServerSocket s = new ServerSocket(7000);
-            System.out.println("Servidor iniciado...");
-            Registro registro = new Registro("ArchivosServidor/RegistroServidor.out");
-            if (!registro.exists())
-                registro.inicializaRegistro();
+            System.out.println("Servidor iniciado esperando conexión...");
+            Palabras palabras = new Palabras();
+            System.out.println(palabras);
             for(;;){ 
                 //Esperamos una conexión
                 Socket cl = s.accept();
                 DataOutputStream dos = new DataOutputStream(cl.getOutputStream());
                 DataInputStream dis = new DataInputStream(cl.getInputStream());
                 System.out.println("Conexión establecida: "+cl.getInetAddress()+":"+cl.getPort());
-                
-                
                 boolean Conexion = true;
                 
                 do{
