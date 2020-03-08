@@ -1,8 +1,25 @@
 package Servidor;
 import Palabras.Palabras;
+import Palabras.Palabra;
 import java.net.*;
 import java.io.*;
+import java.util.LinkedList;
 public class Servidor{
+    
+    private Palabras registro;
+    private DataInputStream inputStream;
+    private LinkedList <Palabra> palabras;
+    
+    
+    public Servidor(ServerSocket socket,LinkedList <Palabra> words)throws IOException{
+    try{
+        this.palabras = words;
+        System.out.println("Linked list : "+ this.palabras.getFirst().getNombre());
+    }catch(Exception e){
+        e.printStackTrace();
+        }
+    };
+
     //Recibimos todas las palabras y conceptos de Palabras.Lista
     public static void registrarPalabras(){
     
@@ -10,7 +27,12 @@ public class Servidor{
     }
     //Enviamos la lista de palabras a el cliente para que las procese
     public static void enviarPalabras(){
-    
+        System.out.println("Esto es una prueba");
+        try{
+        
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
     }
     //Recibimos las cordenas iniciales y finales de cada palabra desde el cliente
     public static void recibirCoordenadas(){
@@ -33,19 +55,20 @@ public class Servidor{
         try {
             //Creamos el socket
             ServerSocket s = new ServerSocket(7000);
-            System.out.println("Servidor iniciado esperando conexión...");
-            Palabras palabras = new Palabras();
-            System.out.println(palabras);
+            Palabras registro = new Palabras();
+            registro.inicializaRegistro();
+            Servidor servidor = new Servidor(s,registro.getLista());
+            System.out.println("Servidor iniciado esperando conexión..."); 
             for(;;){ 
                 //Esperamos una conexión
                 Socket cl = s.accept();
                 DataOutputStream dos = new DataOutputStream(cl.getOutputStream());
                 DataInputStream dis = new DataInputStream(cl.getInputStream());
                 System.out.println("Conexión establecida: "+cl.getInetAddress()+":"+cl.getPort());
-                boolean Conexion = true;
                 
+                boolean Conexion = true;
+                enviarPalabras();
                 do{
-                    enviarPalabras();
                     recibirCoordenada();
                     System.out.println("Respuesta recibida...");
                     Conexion = dis.readBoolean();

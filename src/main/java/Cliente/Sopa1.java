@@ -1,14 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Cliente;
 
-/**
- *
- * @author luise
- */
+import java.io.*;
+import java.net.Socket;
+import java.io.IOException;
 import java.util.Random;
 public class Sopa1 {
 
@@ -90,6 +84,10 @@ public class Sopa1 {
     }
  
   public static void main(String[] args){
+      try{
+      Cliente cl = new Cliente(new Socket ("127.0.0.1", 7000));
+      
+      
       String[] palabras={"LETRAS","SOPA","SOL","SAL","SALON","SUECO"};
       String[] palabrasaux={"SOPA","SOL","SAL","SALON"};
       String tablero[][]=new String[15][15];
@@ -108,5 +106,12 @@ public class Sopa1 {
       //diagonalIzqAbajo(tablero,palabra,2,2);
       rellenar(tablero);
       verTablero(tablero);
+      
+      
+      
+      }catch(Exception e){
+          e.printStackTrace();
+      }
+
   }
 }
