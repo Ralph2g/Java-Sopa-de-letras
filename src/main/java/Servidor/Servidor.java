@@ -6,20 +6,29 @@ import java.io.*;
 import java.util.LinkedList;
 import java.util.*;
 public class Servidor{
-    
+    private ServerSocket serverSocket;
     private Palabras registro;
     private DataInputStream inputStream;
     private LinkedList <Palabra> palabras;
     
     
-    public Servidor(ServerSocket socket,LinkedList <Palabra> words)throws IOException{
+    public Servidor()throws IOException{
     try{
-        this.palabras = words;
+        this.serverSocket = new ServerSocket(7000);
     }catch(Exception e){
         e.printStackTrace();
         }
     };
+    public void startToListen()throws IOException{
+        while(true){
+            Socket cliente = this.serverSocket.accept();
+            new Thread(new ClientWorker(cliente)).start();
+        
+        }
+            
 
+    
+    }
     //Enviamos la lista de palabras a el cliente para que las procese
     public static void enviarPalabras(LinkedList <Palabra> words,OutputStream os){
         try{
@@ -54,22 +63,7 @@ public class Servidor{
 
     public static void main(String[] args) {
         try {
-            //Creamos el socket
-            ServerSocket s = new ServerSocket(7000);
-            Palabras registro = new Palabras();
-            registro.inicializaRegistro();
-            Servidor servidor = new Servidor(s,registro.getLista());
-            System.out.println("Servidor iniciado esperando conexión..."); 
-            for(;;){ 
-                //Esperamos una conexión
-                Socket cl = s.accept();
-                System.out.println("Conexión establecida: "+cl.getInetAddress()+":"+cl.getPort());
-                boolean Conexion = true;
-                enviarPalabras(registro.getLista(),cl.getOutputStream());
-                
-                recibirCoordenada();
-                System.out.println("Respuesta recibida...");
-            }
+            new Servidor().startToListen();
             }catch (Exception e) {
             e.printStackTrace();
         }//catch

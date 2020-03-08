@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.Socket;
 import java.io.IOException;
 import java.util.Random;
+import java.util.Scanner;
 public class Sopa1 {
 
     public static void horizontalNormal(String tablero[][],String palabra){
@@ -112,8 +113,18 @@ public class Sopa1 {
  
   public static void main(String[] args){
       try{
-      Cliente cl = new Cliente(new Socket ("127.0.0.1", 7000));
-      
+      Cliente c = new Cliente();
+      Scanner sc = new Scanner(System.in);
+      String aux = "";
+      while(!aux.equalsIgnoreCase("Close")){
+          System.out.println("Escriba su opcion");
+          aux = sc.nextLine();
+          if(aux.equalsIgnoreCase("Message")){
+              System.out.println("Mensaje del servidor: "+c.recibirMensaje());
+          }
+      }
+      sc.close();
+      c.cerrarConexion();
       
       String[] palabras={"LETRAS","SOPA","SOL","SAL","SALON","SUECO"};
       String[] palabrasaux={"SOPA","SOL","SAL","SALON"};
@@ -138,7 +149,6 @@ public class Sopa1 {
       //diagonalIzqAbajo(tablero,palabra,2,2);
       rellenar(tablero);
       verTablero(tablero);
-      
       
       
       }catch(Exception e){
