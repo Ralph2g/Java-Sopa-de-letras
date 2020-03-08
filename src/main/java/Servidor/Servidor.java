@@ -1,5 +1,4 @@
 package Servidor;
-import Palabras.Palabras;
 import Palabras.Palabra;
 import java.net.*;
 import java.io.*;
@@ -7,30 +6,33 @@ import java.util.LinkedList;
 import java.util.*;
 public class Servidor{
     private ServerSocket serverSocket;
-    private Palabras registro;
     private DataInputStream inputStream;
-    private LinkedList <Palabra> palabras;
+    private ArrayList <Palabra> palabras;
     
     
     public Servidor()throws IOException{
     try{
-        this.serverSocket = new ServerSocket(7000);
+        this.serverSocket = new ServerSocket(7001);
     }catch(Exception e){
         e.printStackTrace();
         }
-    };
+    this.initList();
+    }
+    public void initList(){
+    
+        this.palabras = new ArrayList<>();
+        this.palabras.add(new Palabra("hola1","Concepto1",0));
+        this.palabras.add(new Palabra("Hola2","Concepto2",0));
+    }
     public void startToListen()throws IOException{
         while(true){
             Socket cliente = this.serverSocket.accept();
-            new Thread(new ClientWorker(cliente)).start();
+            new Thread(new ClientWorker(cliente,this.palabras)).start();
         
         }
-            
-
-    
     }
     //Enviamos la lista de palabras a el cliente para que las procese
-    public static void enviarPalabras(LinkedList <Palabra> words,OutputStream os){
+    public static void enviarPalabras(ArrayList <Palabra> words,OutputStream os){
         try{
         ObjectOutputStream oos = new ObjectOutputStream(os);
         oos.writeInt(words.size());

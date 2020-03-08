@@ -1,5 +1,5 @@
 package Cliente;
 
 public enum Options {
-    MESSAGE,CLOSE
+    MESSAGE,GETLIST,CLOSE
 }
