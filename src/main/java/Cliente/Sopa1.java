@@ -121,7 +121,8 @@ public class Sopa1 {
           aux = sc.nextLine();
           if(aux.equalsIgnoreCase("Message")){
               System.out.println("Mensaje del servidor: "+c.recibirMensaje());
-          }
+          }else if(aux.equalsIgnoreCase("lista"))
+              System.out.println("LA lista es : "+c.palabras());
       }
       sc.close();
       c.cerrarConexion();

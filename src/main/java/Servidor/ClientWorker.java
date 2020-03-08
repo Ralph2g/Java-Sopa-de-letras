@@ -23,6 +23,8 @@ public class ClientWorker implements Runnable{
         this.outputStream = new DataOutputStream(this.cl.getOutputStream());
         this.oos= new ObjectOutputStream(this.cl.getOutputStream());
         this.listpalabras = list;
+
+        System.out.println("Cliente Conectado");
     }
     public void run(){
         boolean isConnected =true;

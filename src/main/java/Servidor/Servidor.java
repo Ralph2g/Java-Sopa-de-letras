@@ -17,12 +17,15 @@ public class Servidor{
         e.printStackTrace();
         }
     this.initList();
+    System.out.println("Servidor iniciado, esperando clientes");
     }
     public void initList(){
     
         this.palabras = new ArrayList<>();
         this.palabras.add(new Palabra("hola1","Concepto1",0));
         this.palabras.add(new Palabra("Hola2","Concepto2",0));
+        this.palabras.add(new Palabra("hola1","Concepto1",0));
+        
     }
     public void startToListen()throws IOException{
         while(true){

@@ -16,11 +16,12 @@ public class Cliente{
             this.cl = new Socket("localhost",7001);
             this.inputStream = new DataInputStream(this.cl.getInputStream());
             this.outputStream = new DataOutputStream(this.cl.getOutputStream());
+            this.ois = new ObjectInputStream(this.cl.getInputStream());
         }catch(IOException e){
             e.printStackTrace();
         }
     }
-    public String recibirMensaje(){
+    public String recibirMensaje() {
         String fromServer ="";
         try{
             this.outputStream.writeUTF(Options.MESSAGE.toString());
@@ -44,8 +45,8 @@ public class Cliente{
         StringBuilder result = new StringBuilder();
         int cont = this.inputStream.readInt();
         while(cont>0){
-            Palabra auxPer = (Palabra)this.ois.readObject();
-            result.append("Palabra: "+auxPer.getNombre()+ " Concepto: " + auxPer.getConcepto());
+            Palabra auxPal = (Palabra)this.ois.readObject();
+            result.append(" Palabra: "+auxPal.getNombre()+ " Concepto: " + auxPal.getConcepto());
             cont--;
         }
         return result;
@@ -53,11 +54,13 @@ public class Cliente{
     
     public StringBuilder palabras(){
     StringBuilder s = new StringBuilder();
+    
     try{
         s = this.recibirPalabras();
     }catch(ClassNotFoundException |IOException e){
         e.printStackTrace();
     }
+    System.out.println("Recibo las palabras");
     return s;
     
     }
