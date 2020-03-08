@@ -4,6 +4,7 @@ import Palabras.Palabra;
 import java.net.*;
 import java.io.*;
 import java.util.LinkedList;
+import java.util.*;
 public class Servidor{
     
     private Palabras registro;
@@ -14,22 +15,22 @@ public class Servidor{
     public Servidor(ServerSocket socket,LinkedList <Palabra> words)throws IOException{
     try{
         this.palabras = words;
-        System.out.println("Linked list : "+ this.palabras.getFirst().getNombre());
     }catch(Exception e){
         e.printStackTrace();
         }
     };
 
-    //Recibimos todas las palabras y conceptos de Palabras.Lista
-    public static void registrarPalabras(){
-    
-    
-    }
     //Enviamos la lista de palabras a el cliente para que las procese
-    public static void enviarPalabras(){
-        System.out.println("Esto es una prueba");
+    public static void enviarPalabras(LinkedList <Palabra> words,OutputStream os){
         try{
-        
+        ObjectOutputStream oos = new ObjectOutputStream(os);
+        oos.writeInt(words.size());
+        Iterator<Palabra> aux  = words.iterator();
+        while (aux.hasNext()){
+            oos.writeObject(aux.next());
+        }
+        oos.close();
+        System.out.println("Lista de palabras enviada con exito");
         }catch(Exception e) {
             e.printStackTrace();
         }
@@ -62,22 +63,14 @@ public class Servidor{
             for(;;){ 
                 //Esperamos una conexión
                 Socket cl = s.accept();
-                DataOutputStream dos = new DataOutputStream(cl.getOutputStream());
-                DataInputStream dis = new DataInputStream(cl.getInputStream());
                 System.out.println("Conexión establecida: "+cl.getInetAddress()+":"+cl.getPort());
-                
                 boolean Conexion = true;
-                enviarPalabras();
-                do{
-                    recibirCoordenada();
-                    System.out.println("Respuesta recibida...");
-                    Conexion = dis.readBoolean();
-                }while (Conexion);
-                System.out.println("Cliente desconectado...");
-                dis.close ();
-                dos.close();
+                enviarPalabras(registro.getLista(),cl.getOutputStream());
+                
+                recibirCoordenada();
+                System.out.println("Respuesta recibida...");
             }
-        } catch (Exception e) {
+            }catch (Exception e) {
             e.printStackTrace();
         }//catch
     }//main
