@@ -10,6 +10,7 @@ public class Cliente{
     private DataInputStream inputStream;
     private DataOutputStream outputStream;
     private ObjectInputStream ois;
+    private ArrayList<Palabra> palabras;
     
     public Cliente(){
         try{
@@ -17,6 +18,7 @@ public class Cliente{
             this.inputStream = new DataInputStream(this.cl.getInputStream());
             this.outputStream = new DataOutputStream(this.cl.getOutputStream());
             this.ois = new ObjectInputStream(this.cl.getInputStream());
+            this.palabras = new ArrayList<Palabra>();
         }catch(IOException e){
             e.printStackTrace();
         }
@@ -40,28 +42,15 @@ public class Cliente{
            e.printStackTrace();
         }
     }
-    private StringBuilder recibirPalabras()throws IOException, ClassNotFoundException{
+    public ArrayList<Palabra> recibirPalabras()throws IOException, ClassNotFoundException{
         this.outputStream.writeUTF(Options.GETLIST.toString());
-        StringBuilder result = new StringBuilder();
         int cont = this.inputStream.readInt();
+        Palabra auxpal;
         while(cont>0){
-            Palabra auxPal = (Palabra)this.ois.readObject();
-            result.append(" Palabra: "+auxPal.getNombre()+ " Concepto: " + auxPal.getConcepto());
+            this.palabras.add( (Palabra)this.ois.readObject()  );
             cont--;
         }
-        return result;
+        return this.palabras;
     }
     
-    public StringBuilder palabras(){
-    StringBuilder s = new StringBuilder();
-    
-    try{
-        s = this.recibirPalabras();
-    }catch(ClassNotFoundException |IOException e){
-        e.printStackTrace();
-    }
-    System.out.println("Recibo las palabras");
-    return s;
-    
-    }
 }

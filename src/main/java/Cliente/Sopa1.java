@@ -1,10 +1,14 @@
 package Cliente;
 
+import Palabras.Palabra;
 import java.io.*;
 import java.net.Socket;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.ArrayList;
+
 public class Sopa1 {
 
     public static void horizontalNormal(String tablero[][],String palabra){
@@ -116,13 +120,24 @@ public class Sopa1 {
       Cliente c = new Cliente();
       Scanner sc = new Scanner(System.in);
       String aux = "";
+      ArrayList<Palabra> listPalabras = new ArrayList<Palabra>();;
       while(!aux.equalsIgnoreCase("Close")){
-          System.out.println("Escriba su opcion");
+          System.out.println("Bienvenido a la Sopa de Letras!!!");
+          System.out.println("Para iniciar un juego escriba : Iniciar ");
+          System.out.println("Para Finalizar escriba : close ");
           aux = sc.nextLine();
-          if(aux.equalsIgnoreCase("Message")){
-              System.out.println("Mensaje del servidor: "+c.recibirMensaje());
-          }else if(aux.equalsIgnoreCase("lista"))
-              System.out.println("LA lista es : "+c.palabras());
+          if(aux.equalsIgnoreCase("iniciar")){
+            System.out.println("Mensaje del servidor: "+c.recibirMensaje());
+            listPalabras = c.recibirPalabras();
+              
+            System.out.println("Escriba el modo de juego a elegir: Anagrama, Conceptos");
+            Scanner md = new Scanner(System.in);
+                if(aux.equalsIgnoreCase("Anagrama")){
+                }else if(aux.equalsIgnoreCase("Conceptos")){
+                
+                }
+                        
+          }
       }
       sc.close();
       c.cerrarConexion();
