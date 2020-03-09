@@ -133,8 +133,27 @@ public class Sopa1 {
             System.out.println("Escriba el modo de juego a elegir: Anagrama, Conceptos");
             Scanner md = new Scanner(System.in);
                 if(aux.equalsIgnoreCase("Anagrama")){
+                    //Crear metodo que extraiga las palabras de la lista y a cada una le asigne un anagrama para poner en la sopa
+                    
+                    //LLEnar la sopa con la lista de anagramas
+                    
+                    //Obtener las coordenadas de cada palabra iniciales y finales
+                    
+                    //enviar las coordenadas iniciales y finales de cada palabra al servidor para verificar 
+                    
+                    //Desplegar la sopa y solicitar que meta las coordenadas y niciales y finales  de cada palabra que encuentre
+                            //Coordenada inicial
+                            
+                            //coordenada final
+                    //Se Verifican las coordenadas ingresadas con las que están en el servidor
+                    
+                    //si es correcto se despliega algo en la sopa para decir que la encontró suma 1 al contador de palabras correctas(Para que cuando llegue a 14 finalice el juego )
+                    
+                    //en caso de que no sea correcto se muestra un mensaje de vuelva a ingresar las coordanadas
+                    
+                    //Cuando el contador de palabras encontradas (linea 150) sea igual a 14 finaliza el juego y suma los puntos de las palabras (En caso de mostrar los score)
                 }else if(aux.equalsIgnoreCase("Conceptos")){
-                
+                    
                 }
                         
           }
