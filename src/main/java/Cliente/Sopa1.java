@@ -115,26 +115,30 @@ public class Sopa1 {
         }
     }
  
-  public static void main(String[] args){
-      try{
-      Cliente c = new Cliente();
-      Scanner sc = new Scanner(System.in);
-      String aux = "";
-      ArrayList<Palabra> listPalabras = new ArrayList<Palabra>();;
-      while(!aux.equalsIgnoreCase("Close")){
-          System.out.println("Bienvenido a la Sopa de Letras!!!");
-          System.out.println("Para iniciar un juego escriba : Iniciar ");
-          System.out.println("Para Finalizar escriba : close ");
-          aux = sc.nextLine();
-          if(aux.equalsIgnoreCase("iniciar")){
-            System.out.println("Mensaje del servidor: "+c.recibirMensaje());
-            listPalabras = c.recibirPalabras();
-              
-            System.out.println("Escriba el modo de juego a elegir: Anagrama, Conceptos");
-            Scanner md = new Scanner(System.in);
+    public static void main(String[] args){
+        try{
+        Cliente c = new Cliente();
+
+        ArrayList<Palabra> listPalabras = new ArrayList<Palabra>();;
+        System.out.println("Bienvenido a la Sopa de Letras!!!");
+        Scanner sc = new Scanner(System.in);
+        String aux = "";        
+        while(!aux.equalsIgnoreCase("Close")){
+            System.out.println("Para iniciar un juego escriba : Iniciar ");
+            System.out.println("Para Finalizar escriba : close ");
+            aux = sc.nextLine();
+            if(aux.equalsIgnoreCase("iniciar")){
+                System.out.println(c.recibirMensaje());
+                listPalabras = c.recibirPalabras();
+                System.out.println("Juego iniciado escoja un modo de juego: Anagrama, Conceptos");
+                aux = sc.nextLine();
+                while(!aux.equalsIgnoreCase("Anagrama") && !aux.equalsIgnoreCase("Conceptos")){
+                    System.out.println("Opción invalida ingrese: Anagrama o Conceptos");
+                    aux = sc.nextLine();
+                }
                 if(aux.equalsIgnoreCase("Anagrama")){
                     //Crear metodo que extraiga las palabras de la lista y a cada una le asigne un anagrama para poner en la sopa
-                    
+                    System.out.println("Hola desde anagrama");
                     //LLEnar la sopa con la lista de anagramas
                     
                     //Obtener las coordenadas de cada palabra iniciales y finales
@@ -152,14 +156,15 @@ public class Sopa1 {
                     //en caso de que no sea correcto se muestra un mensaje de vuelva a ingresar las coordanadas
                     
                     //Cuando el contador de palabras encontradas (linea 150) sea igual a 14 finaliza el juego y suma los puntos de las palabras (En caso de mostrar los score)
+                    aux = "close";
                 }else if(aux.equalsIgnoreCase("Conceptos")){
-                    
+                    aux = "close";
                 }
-                        
-          }
-      }
-      sc.close();
-      c.cerrarConexion();
+            }
+            System.out.println("Se reinicia el juego");
+        }
+        sc.close();
+        c.cerrarConexion();
       
       String[] palabras={"LETRAS","SOPA","SOL","SAL","SALON","SUECO"};
       String[] palabrasaux={"SOPA","SOL","SAL","SALON"};

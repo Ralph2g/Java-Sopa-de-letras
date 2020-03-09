@@ -27,9 +27,7 @@ public class Cliente{
         String fromServer ="";
         try{
             this.outputStream.writeUTF(Options.MESSAGE.toString());
-                        System.out.println("Esperando respuesta...");
             fromServer = this.inputStream.readUTF();
-                        System.out.println("Rescpuesta recibida");
         }catch(IOException e){
            e.printStackTrace();
         }
