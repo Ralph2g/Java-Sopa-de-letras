@@ -122,23 +122,34 @@ public class Sopa1 {
         ArrayList<Palabra> listPalabras = new ArrayList<Palabra>();;
         System.out.println("Bienvenido a la Sopa de Letras!!!");
         Scanner sc = new Scanner(System.in);
-        String aux = "";        
+        String aux = "";
+        int numPalabras = 14;
         while(!aux.equalsIgnoreCase("Close")){
             System.out.println("Para iniciar un juego escriba : Iniciar ");
             System.out.println("Para Finalizar escriba : close ");
             aux = sc.nextLine();
             if(aux.equalsIgnoreCase("iniciar")){
                 System.out.println(c.recibirMensaje());
-                listPalabras = c.recibirPalabras();
+                listPalabras = c.recibirPalabras();//REcibimos las palabras de la sopa desde el servidor
                 System.out.println("Juego iniciado escoja un modo de juego: Anagrama, Conceptos");
                 aux = sc.nextLine();
                 while(!aux.equalsIgnoreCase("Anagrama") && !aux.equalsIgnoreCase("Conceptos")){
                     System.out.println("Opción invalida ingrese: Anagrama o Conceptos");
                     aux = sc.nextLine();
                 }
+                //Se guardan las palabras recibidas desde el servidor en una variable
+                String[] palabras = new String[numPalabras];
+                for (int i=0; i<palabras.length ;i++){
+                    palabras[i]= listPalabras.get(i).getNombre();//guardamos cada palabra en la lista
+                }
                 if(aux.equalsIgnoreCase("Anagrama")){
-                    //Crear metodo que extraiga las palabras de la lista y a cada una le asigne un anagrama para poner en la sopa
+                    //Funcion temporal (Se comprueba que las palabras se reciben y se guardan correctamente)
                     System.out.println("Hola desde anagrama");
+                    for(int i=0;i<palabras.length ;i++ ){
+                        System.out.println("Concepto ["+(i+1)+"]: "+palabras[i]);
+                    }
+                    //Crear metodo que extraiga las palabras de la lista y a cada una le asigne un anagrama para poner en la sopa
+
                     //LLEnar la sopa con la lista de anagramas
                     
                     //Obtener las coordenadas de cada palabra iniciales y finales
@@ -158,6 +169,15 @@ public class Sopa1 {
                     //Cuando el contador de palabras encontradas (linea 150) sea igual a 14 finaliza el juego y suma los puntos de las palabras (En caso de mostrar los score)
                     aux = "close";
                 }else if(aux.equalsIgnoreCase("Conceptos")){
+                    //Se guardan los conceptos de las palabras recibidas desde el servidor
+                    String[] conceptos = new String[numPalabras];
+                    for (int i=0; i<conceptos.length ;i++){
+                        conceptos[i]= listPalabras.get(i).getConcepto();//guardamos cada palabra en la lista
+                    }
+                    for(int i=0;i<conceptos.length ;i++ ){
+                        System.out.println("Concepto ["+(i+1)+"]: "+conceptos[i]);
+                    }
+                    
                     aux = "close";
                 }
             }
@@ -166,7 +186,6 @@ public class Sopa1 {
         sc.close();
         c.cerrarConexion();
       
-      String[] palabras={"LETRAS","SOPA","SOL","SAL","SALON","SUECO"};
       String[] palabrasaux={"SOPA","SOL","SAL","SALON"};
       String palabrasHN="LETRAS";
       String[] palabrasVN={"LETRAS"};
