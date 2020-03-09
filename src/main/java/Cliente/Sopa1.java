@@ -162,13 +162,12 @@ public class Sopa1 {
                     //Crear metodo que extraiga las palabras de la del arreglo y a cada una le asigne un anagrama para poner en la sopa
                     String [] anagramas= generarAnagramas(palabras); ///FALTATERMINAR EL METODO
                     //LLEnar la sopa con las palabras recibidas del servidor 
-                    
-                    
+
                     //Desplegar la lista de ANAGRAMAs a encontrar en la sopa
                     System.out.println("Anagramas:");
                     
                     for(int i=0;i<anagramas.length ;i++ ){
-                        System.out.println("Concepto ["+(i+1)+"]: "+anagramas[i]);
+                        System.out.println("Concepto (Falata func crearAnagrama) ["+(i+1)+"]: "+anagramas[i]);
                     }
                     //Obtener las coordenadas de cada palabra iniciales y finales
                     
