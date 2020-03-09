@@ -114,6 +114,20 @@ public class Sopa1 {
             }
         }
     }
+    //Genera un anagrama a partir de una cadena 
+    public static String crearAnagrama(String palabra){
+        return "";
+    }
+    //Regresa una lista de anagramas a partir de un arreglo de Strings
+    public static String[] generarAnagramas(String [] pal){
+        String [] anagramas =  new String[pal.length];
+        for (int i = 0; i < pal.length;i++){
+            pal[i] = crearAnagrama(pal[i]);
+        }
+        
+        return anagramas;
+    }
+    
  
     public static void main(String[] args){
         try{
@@ -144,14 +158,18 @@ public class Sopa1 {
                 }
                 if(aux.equalsIgnoreCase("Anagrama")){
                     //Funcion temporal (Se comprueba que las palabras se reciben y se guardan correctamente)
-                    System.out.println("Hola desde anagrama");
-                    for(int i=0;i<palabras.length ;i++ ){
-                        System.out.println("Concepto ["+(i+1)+"]: "+palabras[i]);
-                    }
-                    //Crear metodo que extraiga las palabras de la lista y a cada una le asigne un anagrama para poner en la sopa
 
-                    //LLEnar la sopa con la lista de anagramas
+                    //Crear metodo que extraiga las palabras de la del arreglo y a cada una le asigne un anagrama para poner en la sopa
+                    String [] anagramas= generarAnagramas(palabras); ///FALTATERMINAR EL METODO
+                    //LLEnar la sopa con las palabras recibidas del servidor 
                     
+                    
+                    //Desplegar la lista de ANAGRAMAs a encontrar en la sopa
+                    System.out.println("Anagramas:");
+                    
+                    for(int i=0;i<anagramas.length ;i++ ){
+                        System.out.println("Concepto ["+(i+1)+"]: "+anagramas[i]);
+                    }
                     //Obtener las coordenadas de cada palabra iniciales y finales
                     
                     //enviar las coordenadas iniciales y finales de cada palabra al servidor para verificar 
