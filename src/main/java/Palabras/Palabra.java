@@ -8,12 +8,10 @@ public class Palabra implements Serializable{
     private String concepto;
     private String coordInicio;
     private String coordFin;
-    private int puntos;
 
-    public Palabra(String nombre, String concepto,int puntos) {
+    public Palabra(String nombre, String concepto) {
         this.nombre = nombre;
         this.concepto = concepto;
-        this.puntos = puntos;
         this.coordInicio = "";
         this.coordFin = "";
     }
@@ -33,9 +31,6 @@ public class Palabra implements Serializable{
         return this.coordFin;
     }
     
-    public int getPuntos(){
-    return this.puntos;
-    }
     public void setCoordInicio(String coordInicio){
         this.coordInicio = coordInicio;
     }

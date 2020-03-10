@@ -170,7 +170,6 @@ public class Sopa1 {
                     String [] anagramas= generarAnagramas(palabras); ///FALTATERMINAR EL METODO
                     //LLEnar la sopa con las palabras recibidas del servidor 
                     //Desplegar la lista de ANAGRAMAs a encontrar en la sopa
-                    System.out.println("Anagramas:");
                     for(int i=0;i<anagramas.length ;i++ ){
                         System.out.println("Anagrama ["+(i+1)+"]: "+anagramas[i]);
                     }
@@ -187,6 +186,26 @@ public class Sopa1 {
 //enviar las coordenadas iniciales y finales de cada palabra al servidor para verificar 
                     c.enviarCoordenadas(listCoordenadasInicio, listCoordenadasFinal);
                     //Desplegar la sopa y solicitar que meta las coordenadas y niciales y finales  de cada palabra que encuentre
+                    System.out.println("Juego iniciado: Para salir escriba: cancelar");
+                    System.out.println("Escriba la coordenada Inicial y final de donde inicie la palabra (x,y):");
+                    System.out.println("Ejemplo: 1,2");
+                    int correctas= 13;
+                    while( !(correctas >13) | !(aux.equalsIgnoreCase("cancelar") ) ){
+                        System.out.println("Coordenada Inicial:");
+                        aux = sc.nextLine();
+                        String coordinicial = aux;
+                        if(!aux.equalsIgnoreCase("cancelar")){
+                            System.out.println("Coordenada final");
+                            aux = sc.nextLine();
+                            String coordfinal = aux;
+                            boolean verificacion = c.enviarRespuesta(coordinicial, coordfinal);
+                            if(verificacion)
+                                correctas++;
+                        }
+                        System.out.println(correctas);
+                        correctas++;//LINEA DE PRUEBA BORRAR
+                        System.out.println(correctas);
+                    }
                             //Coordenada inicial
                             
                             //coordenada final

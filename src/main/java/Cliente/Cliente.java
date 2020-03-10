@@ -7,11 +7,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 public class Cliente{
     private Socket cl;
+    private String nombre;
     private DataInputStream inputStream;
     private DataOutputStream outputStream;
     private ObjectInputStream ois;
     private ArrayList<Palabra> palabras;
     private ObjectOutputStream oos;
+    private ArrayList<String> score;
     
     public Cliente(){
         try{
@@ -21,6 +23,8 @@ public class Cliente{
             this.ois = new ObjectInputStream(this.cl.getInputStream());
             this.oos = new ObjectOutputStream(this.cl.getOutputStream());
             this.palabras = new ArrayList<Palabra>();
+            this.score = new ArrayList<String>();
+            this.nombre = "";
         }catch(IOException e){
             e.printStackTrace();
         }
@@ -60,6 +64,13 @@ public class Cliente{
             this.outputStream.writeUTF(listcoordenadasInicio[i]);  
         for (int i = 0; i<listcoordenadasFinal.length;i++)
             this.outputStream.writeUTF(listcoordenadasFinal[i]);
+    }
+    
+    public boolean enviarRespuesta(String ini,String fin) throws IOException{
+        this.outputStream.writeUTF(ini);
+        this.outputStream.writeUTF(fin);
+        boolean respuesta = this.inputStream.readBoolean();
+        return respuesta;
     }
     
 }

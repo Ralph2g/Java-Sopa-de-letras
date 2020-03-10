@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Timer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,7 +21,7 @@ public class ClientWorker implements Runnable{
     private ArrayList<Palabra> listpalabras;
     private ObjectOutputStream oos;
     private ObjectInputStream ois;
-    
+    private Timer t;
     public ClientWorker(Socket socket,ArrayList<Palabra> list)throws IOException{
         this.cl = socket;
         this.inputStream = new DataInputStream(this.cl.getInputStream());
@@ -28,7 +29,7 @@ public class ClientWorker implements Runnable{
         this.oos= new ObjectOutputStream(this.cl.getOutputStream());
         this.ois= new ObjectInputStream(this.cl.getInputStream());
         this.listpalabras = list;
-
+        this.t = new Timer();
         System.out.println("Cliente Conectado");
     }
     public void run(){
@@ -95,19 +96,25 @@ public class ClientWorker implements Runnable{
         //Recibimos cada una de las coordenadas de inicio
         for (int i=0; i< cont ;i++){
             this.listpalabras.get(i).setCoordInicio(this.inputStream.readUTF());
-            System.out.println("Coordenada ["+i+"]: "+this.listpalabras.get(i).getCoordInicio()+"recibida y guardada");
         }
         //Recibimos y guardamos las coordenadas finales
         for (int i=0; i< cont ;i++){
             this.listpalabras.get(i).setCoordFin(this.inputStream.readUTF());
-            System.out.println("Coordenada ["+i+"]: "+this.listpalabras.get(i).getCoordFin()+"recibida");
         }
     }
     
         //Recibimos la coordenada de la palabra que intenta encontrar en la sopa el usuario
-    public void enviarRespuesta(){
-    
-    
+    public void enviarRespuesta() throws IOException{
+        String coordInicio = this.inputStream.readUTF();
+        String coordFinal = this.inputStream.readUTF();
+        Boolean bandera = false;
+        //Se compara con cada una de las coordenadas iniciales y finales de nuestra lista de palabras
+        for (int i= 0; i< this.listpalabras.size();i++)
+            if ((this.listpalabras.get(i).getCoordInicio() == coordInicio) && (this.listpalabras.get(i).getCoordFin() == coordFinal))
+                bandera = true;
+        //Regresamos la respuesta
+        this.outputStream.writeBoolean(bandera);
+        
     }
     
     protected void finalize() throws Throwable{
