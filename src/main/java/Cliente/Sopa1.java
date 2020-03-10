@@ -2,12 +2,16 @@ package Cliente;
 
 import Palabras.Palabra;
 import java.io.*;
+import java.util.Collections;
 import java.net.Socket;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Sopa1 {
 
@@ -116,16 +120,21 @@ public class Sopa1 {
     }
     //Genera un anagrama a partir de una cadena 
     public static String crearAnagrama(String palabra){
-        return "";
+	String str[] = palabra.split("");
+	List<String> al = Arrays.asList(str);
+	Collections.shuffle(al);
+        String anagrama = al.stream()// Stream<Character>
+                .map(String::valueOf)   // Stream<String>
+                .collect(Collectors.joining());
+        return anagrama;
     }
     //Regresa una lista de anagramas a partir de un arreglo de Strings
     public static String[] generarAnagramas(String [] pal){
-        String [] anagramas =  new String[pal.length];
         for (int i = 0; i < pal.length;i++){
             pal[i] = crearAnagrama(pal[i]);
         }
         
-        return anagramas;
+        return pal;
     }
     
  
@@ -157,22 +166,26 @@ public class Sopa1 {
                     palabras[i]= listPalabras.get(i).getNombre();//guardamos cada palabra en la lista
                 }
                 if(aux.equalsIgnoreCase("Anagrama")){
-                    //Funcion temporal (Se comprueba que las palabras se reciben y se guardan correctamente)
-
                     //Crear metodo que extraiga las palabras de la del arreglo y a cada una le asigne un anagrama para poner en la sopa
                     String [] anagramas= generarAnagramas(palabras); ///FALTATERMINAR EL METODO
                     //LLEnar la sopa con las palabras recibidas del servidor 
-
                     //Desplegar la lista de ANAGRAMAs a encontrar en la sopa
                     System.out.println("Anagramas:");
-                    
                     for(int i=0;i<anagramas.length ;i++ ){
-                        System.out.println("Concepto (Falata func crearAnagrama) ["+(i+1)+"]: "+anagramas[i]);
+                        System.out.println("Anagrama ["+(i+1)+"]: "+anagramas[i]);
                     }
                     //Obtener las coordenadas de cada palabra iniciales y finales
+
+                    String [] listCoordenadasInicio = new String[numPalabras];
+                    for(int i= 0;i <numPalabras;i++)
+                        listCoordenadasInicio[i] = ("["+i+"]"+"["+(i+2)+"]");
                     
-                    //enviar las coordenadas iniciales y finales de cada palabra al servidor para verificar 
+                    String [] listCoordenadasFinal = new String[numPalabras];
+                    for(int i= 0;i <numPalabras;i++)
+                        listCoordenadasFinal[i] = ("["+(i+2)+"]"+"["+(i+4)+"]");
                     
+//enviar las coordenadas iniciales y finales de cada palabra al servidor para verificar 
+                    c.enviarCoordenadas(listCoordenadasInicio, listCoordenadasFinal);
                     //Desplegar la sopa y solicitar que meta las coordenadas y niciales y finales  de cada palabra que encuentre
                             //Coordenada inicial
                             

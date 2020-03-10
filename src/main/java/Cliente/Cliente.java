@@ -11,6 +11,7 @@ public class Cliente{
     private DataOutputStream outputStream;
     private ObjectInputStream ois;
     private ArrayList<Palabra> palabras;
+    private ObjectOutputStream oos;
     
     public Cliente(){
         try{
@@ -18,6 +19,7 @@ public class Cliente{
             this.inputStream = new DataInputStream(this.cl.getInputStream());
             this.outputStream = new DataOutputStream(this.cl.getOutputStream());
             this.ois = new ObjectInputStream(this.cl.getInputStream());
+            this.oos = new ObjectOutputStream(this.cl.getOutputStream());
             this.palabras = new ArrayList<Palabra>();
         }catch(IOException e){
             e.printStackTrace();
@@ -49,6 +51,15 @@ public class Cliente{
             cont--;
         }
         return this.palabras;
+    }
+    public void enviarCoordenadas(String [] listcoordenadasInicio,String [] listcoordenadasFinal)throws IOException{
+        this.outputStream.writeUTF(Options.COORDINATES.toString());
+        this.outputStream.writeInt(listcoordenadasInicio.length);
+        //Enviamos las coordenadas iniciales
+        for (int i = 0; i<listcoordenadasInicio.length;i++)
+            this.outputStream.writeUTF(listcoordenadasInicio[i]);  
+        for (int i = 0; i<listcoordenadasFinal.length;i++)
+            this.outputStream.writeUTF(listcoordenadasFinal[i]);
     }
     
 }

@@ -6,16 +6,16 @@ import java.io.Serializable;
 public class Palabra implements Serializable{
     private String nombre;
     private String concepto;
-    private int[] coordInicio;
-    private int[] coordFin;
+    private String coordInicio;
+    private String coordFin;
     private int puntos;
 
     public Palabra(String nombre, String concepto,int puntos) {
         this.nombre = nombre;
         this.concepto = concepto;
         this.puntos = puntos;
-        this.coordInicio = new int[2];
-        this.coordFin = new int[2];
+        this.coordInicio = "";
+        this.coordFin = "";
     }
     
     // Se incializan lo getters and setters
@@ -25,21 +25,21 @@ public class Palabra implements Serializable{
     public String getConcepto(){
         return this.concepto;
     }
-    public int[] getCoordInicio(){
+    public String getCoordInicio(){
         return this.coordInicio;
     
     }
-    public int[] getCoordFin(){
+    public String getCoordFin(){
         return this.coordFin;
     }
     
     public int getPuntos(){
     return this.puntos;
     }
-    public void setCoordInicio(int[] coordInicio){
+    public void setCoordInicio(String coordInicio){
         this.coordInicio = coordInicio;
     }
-    public void setCoordFin(int[] coordFin){
+    public void setCoordFin(String coordFin){
         this.coordInicio = coordFin;
     }
 }
