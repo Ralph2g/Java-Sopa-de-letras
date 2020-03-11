@@ -1,5 +1,6 @@
 package Cliente;
-
+import Palabras.Score;
+import java.util.Calendar;
 import Palabras.Palabra;
 import java.io.*;
 import java.net.Socket;
@@ -39,6 +40,13 @@ public class Cliente{
            e.printStackTrace();
         }
         return fromServer;
+    }
+    public void enviarNombre(String nombre) throws IOException{
+        this.outputStream.writeUTF(Options.NAME.toString());
+        this.outputStream.flush();
+        this.outputStream.writeUTF(nombre);
+        this.outputStream.flush();
+        
     }
     public void cerrarConexion(){
         try{
@@ -84,6 +92,24 @@ public class Cliente{
         this.outputStream.flush();
         int respuesta = this.inputStream.readInt();
         return respuesta;
+    }
+    
+    public void enviarTiempo(Calendar inicio, Calendar fin) throws IOException{
+        int hora = fin.HOUR_OF_DAY - inicio.HOUR_OF_DAY;
+        int minutos = ( ((hora*60)-inicio.MINUTE)+(fin.MINUTE));
+        int segundos = ( ((minutos*60)-inicio.SECOND)+(fin.SECOND));
+        System.out.println(fin.HOUR_OF_DAY+" : "+inicio.HOUR_OF_DAY);
+        System.out.println(fin.MINUTE+" : "+inicio.MINUTE);
+        System.out.println(fin.SECOND+" : "+inicio.SECOND);
+        Score puntos = new Score();
+        puntos.setMinutos(minutos);
+        puntos.setSegundos(segundos);
+        this.outputStream.writeUTF(Options.TIME.toString());
+        this.outputStream.flush();
+        this.oos.writeObject(puntos);
+        this.oos.flush();
+        
+        
     }
     
 }

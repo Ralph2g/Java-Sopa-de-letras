@@ -2,6 +2,7 @@
 package Servidor;
 
 import Palabras.Palabra;
+import Palabras.Score;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -21,7 +22,8 @@ public class ClientWorker implements Runnable{
     private ArrayList<Palabra> listpalabras;
     private ObjectOutputStream oos;
     private ObjectInputStream ois;
-    private Timer t;
+    private String name;
+    
     public ClientWorker(Socket socket,ArrayList<Palabra> list)throws IOException{
         this.cl = socket;
         this.inputStream = new DataInputStream(this.cl.getInputStream());
@@ -29,7 +31,7 @@ public class ClientWorker implements Runnable{
         this.oos= new ObjectOutputStream(this.cl.getOutputStream());
         this.ois= new ObjectInputStream(this.cl.getInputStream());
         this.listpalabras = list;
-        this.t = new Timer();
+        this.name = "";
         System.out.println("Cliente Conectado");
     }
     public void run(){
@@ -49,16 +51,21 @@ public class ClientWorker implements Runnable{
     private boolean chooseOptions(boolean isConnected)throws IOException, ClassNotFoundException{
         OptionsServer aux = OptionsServer.valueOf(this.inputStream.readUTF());
         switch(aux){
+                
         case MESSAGE:
             System.out.println("Solicitud de mensaje recibida de parte del cliente");
             this.message();
+            break;
+        case NAME:
+            System.out.println("Cliente envia nombre");
+            this.guardarNombre();
             break;
         case GETLIST:
             System.out.println("Solicitud de palabras recibida de parte del cliente");
             this.sendPalabras();
             break;
         case CLOSE:
-            System.out.println("Solicitud de Cierres de conexión recibida de parte del cliente");
+            System.out.println("Solicitud de Cierre de conexión recibida de parte del cliente");
             isConnected = false;
             break;
         case COORDINATES:
@@ -69,10 +76,18 @@ public class ClientWorker implements Runnable{
             System.out.println("Cliente envia coordenada");
             this.enviarRespuesta();
             break;
+        case TIME:
+            System.out.println("Cliente envia las el score");
+            this.guardarScore();
+            break;
         default:
             break;    
         }
         return isConnected;
+    }
+    private void guardarNombre() throws IOException{
+        this.name = this.inputStream.readUTF();
+        System.out.println("Usuario: "+ this.name+ " Conectado");
     }
     //Envío de las palabras a el cliente
     private void sendPalabras()throws IOException{
@@ -122,7 +137,10 @@ public class ClientWorker implements Runnable{
         this.outputStream.flush();
         
     }
-    
+    public void guardarScore() throws IOException, ClassNotFoundException{
+        Score puntuacion = (Score)this.ois.readObject();
+        System.out.println("El tiempo en resolver el crucigrmaa fue: "+ puntuacion.getMinutos()+"minutos con "+puntuacion.getSegundos()+"segundos");
+    }
     protected void finalize() throws Throwable{
     
     

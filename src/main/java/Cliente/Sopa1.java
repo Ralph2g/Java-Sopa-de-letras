@@ -1,5 +1,6 @@
 package Cliente;
 
+import java.util.Calendar;
 import Palabras.Palabra;
 import java.io.*;
 import java.util.Collections;
@@ -148,13 +149,16 @@ public static final String ANSI_RESET = "\u001B[0m";//Restablece los colores
         System.out.println("Bienvenido a la Sopa de Letras!!!");
         Scanner sc = new Scanner(System.in);
         String aux = "";
+        System.out.println("Ingrese su nombre de usuario");
+        String nombre = sc.nextLine();
         int numPalabras = 14;
         while(!aux.equalsIgnoreCase("Close")){
             System.out.println("Para iniciar un juego escriba : Iniciar ");
             System.out.println("Para Finalizar escriba : close ");
             aux = sc.nextLine();
+            System.out.println(c.recibirMensaje());
             if(aux.equalsIgnoreCase("iniciar")){
-                System.out.println(c.recibirMensaje());
+                c.enviarNombre(nombre);
                 listPalabras = c.recibirPalabras();//REcibimos las palabras de la sopa desde el servidor
                 System.out.println("Juego iniciado escoja un modo de juego: Anagrama, Conceptos");
                 aux = sc.nextLine();
@@ -168,6 +172,8 @@ public static final String ANSI_RESET = "\u001B[0m";//Restablece los colores
                     palabras[i]= listPalabras.get(i).getNombre();//guardamos cada palabra en la lista
                 }
                 if(aux.equalsIgnoreCase("Anagrama")){
+                    Calendar ini=Calendar.getInstance();
+                    System.out.println("Hora de Inicio: "+ini.get(Calendar.HOUR_OF_DAY)+":"+ini.get(Calendar.MINUTE)+":"+ini.get(Calendar.SECOND));
                     //Crear metodo que extraiga las palabras de la del arreglo y a cada una le asigne un anagrama para poner en la sopa
                     String [] anagramas= generarAnagramas(palabras); ///FALTATERMINAR EL METODO
                     //Obtener las coordenadas de cada palabra iniciales y finales
@@ -180,11 +186,11 @@ public static final String ANSI_RESET = "\u001B[0m";//Restablece los colores
                     //enviar las coordenadas iniciales y finales de cada palabra al servidor para verificar 
                     c.enviarCoordenadas(listCoordenadasInicio, listCoordenadasFinal);
                     //Desplegar la sopa y solicitar que meta las coordenadas y niciales y finales  de cada palabra que encuentre
-                    System.out.println("Juego iniciado: Para salir escriba: cancelar");
+                    System.out.println("Juego iniciado: Para salir escriba: CANCELAR");
                     System.out.println("Escriba la coordenada Inicial y final de donde inicie la palabra (x,y):");
-                    int correctas= 13;
+                    int correctas= 12;
                     int [] vectorCorrectas = new int[numPalabras];
-                    while( !(correctas <13) | !(aux.equalsIgnoreCase("cancelar") ) ){
+                    while(!(aux.equalsIgnoreCase("cancelar") ) ){
                         //Lista anagramas
                         for(int i=0;i<anagramas.length ;i++ ){
                             if(vectorCorrectas[i] != 1)
@@ -201,7 +207,6 @@ public static final String ANSI_RESET = "\u001B[0m";//Restablece los colores
                             aux = sc.nextLine();
                             String coordfinal = aux;
                             int verificacion = c.enviarRespuesta(coordinicial, coordfinal);
-                            System.out.println(verificacion);
                             if( (verificacion != -1) ){
                                 //Metodo para marcar las celdas encontradas o rayar las letras
                                 vectorCorrectas[verificacion] = 1;
@@ -209,34 +214,79 @@ public static final String ANSI_RESET = "\u001B[0m";//Restablece los colores
                                 correctas++;
                             }
                         }
-                        if(correctas < 13)
+                        
+                        if(correctas > 13){
+                            Calendar fin=Calendar.getInstance();
+                            System.out.println("Hora de Finalización del juego: "+fin.get(Calendar.HOUR_OF_DAY)+":"+fin.get(Calendar.MINUTE)+":"+fin.get(Calendar.SECOND));
                             aux="cancelar";
+                            c.enviarTiempo(ini,fin);
+                        }
                     }
-                            //Coordenada inicial
-                            
-                            //coordenada final
-                    //Se Verifican las coordenadas ingresadas con las que están en el servidor
-                    
-                    //si es correcto se despliega algo en la sopa para decir que la encontró suma 1 al contador de palabras correctas(Para que cuando llegue a 14 finalice el juego )
-                    
-                    //en caso de que no sea correcto se muestra un mensaje de vuelva a ingresar las coordanadas
-                    
-                    //Cuando el contador de palabras encontradas (linea 150) sea igual a 14 finaliza el juego y suma los puntos de las palabras (En caso de mostrar los score)
-                    aux = "close";
                 }else if(aux.equalsIgnoreCase("Conceptos")){
+                    Calendar ini=Calendar.getInstance();
+                    System.out.println("Hora de Inicio: "+ini.get(Calendar.HOUR_OF_DAY)+":"+ini.get(Calendar.MINUTE)+":"+ini.get(Calendar.SECOND));
                     //Se guardan los conceptos de las palabras recibidas desde el servidor
                     String[] conceptos = new String[numPalabras];
                     for (int i=0; i<conceptos.length ;i++){
                         conceptos[i]= listPalabras.get(i).getConcepto();//guardamos cada palabra en la lista
                     }
-                    for(int i=0;i<conceptos.length ;i++ ){
-                        System.out.println("Concepto ["+(i+1)+"]: "+conceptos[i]);
-                    }
-                    
-                    aux = "close";
-                }
+                    //Obtener las coordenadas de cada palabra iniciales y finales
+                    String [] listCoordenadasInicio = new String[numPalabras];
+                    for(int i= 0;i <numPalabras;i++)
+                        listCoordenadasInicio[i] = (""+i+","+(i+2));
+                    String [] listCoordenadasFinal = new String[numPalabras];
+                    for(int i= 0;i <numPalabras;i++)
+                        listCoordenadasFinal[i] = (""+i+","+(i+2));
+                    //Enviamos las coordenadas iniciales y finales al servidor
+                    c.enviarCoordenadas(listCoordenadasInicio, listCoordenadasFinal);
+                    //Desplegar la sopa y solicitar que meta las coordenadas y niciales y finales  de cada palabra que encuentre
+                    System.out.println("Juego iniciado: Para salir escriba: CANCELAR");
+                    System.out.println("Escriba la coordenada Inicial y final de donde inicie la palabra (x,y):");
+                    int correctas= 12;
+                    int [] vectorCorrectas = new int[numPalabras];
+                    while(!(aux.equalsIgnoreCase("cancelar") ) ){
+                        //Lista anagramas
+                        for(int i=0;i<palabras.length ;i++ ){
+                            if(vectorCorrectas[i] != 1)
+                                System.out.println(ANSI_RED + "Concepto ["+(i+1)+"]: "+conceptos[i]+ ANSI_RESET);
+                            else 
+                                System.out.println(ANSI_GREEN + "Concepto ["+(i+1)+"]: "+conceptos[i]+ ANSI_RESET);
+                        }
+                        System.out.println("Ejemplo: 1,2");
+                        System.out.println("Coordenada Inicial:");
+                        aux = sc.nextLine();
+                        String coordinicial = aux;
+                        if(!aux.equalsIgnoreCase("cancelar")){
+                            System.out.println("Coordenada final");
+                            aux = sc.nextLine();
+                            String coordfinal = aux;
+                            int verificacion = c.enviarRespuesta(coordinicial, coordfinal);
+                            if( (verificacion != -1) ){
+                                //Metodo para marcar las celdas encontradas o rayar las letras
+                                vectorCorrectas[verificacion] = 1;
+                                System.out.println("Correcto!! La palabra "+ palabras[verificacion]+ " encontrada en la sopa");
+                                correctas++;
+                            }
+                        }
+                        
+                        if(correctas > 13){
+                            Calendar fin=Calendar.getInstance();
+                            System.out.println("Hora de Finalización del juego: "+fin.get(Calendar.HOUR_OF_DAY)+":"+fin.get(Calendar.MINUTE)+":"+fin.get(Calendar.SECOND));
+                            aux="cancelar";
+                            c.enviarTiempo(ini,fin);
+                        }
+                    }//Fin coordenadas
+                }//Fin conceptos
+                
+            }//Fin iniciar
+            //Menu de reinicio
+            System.out.println("FIN DEL JUEGO");
+            System.out.println("Teclee: 'reintentar' para intentarlo de nuevo o 'close' para finalizar");
+            aux = sc.nextLine();
+            if(aux.equalsIgnoreCase("reintentar")){
+                
+                System.out.println("Se reinicia el juego");
             }
-            System.out.println("Se reinicia el juego");
         }
         sc.close();
         c.cerrarConexion();
