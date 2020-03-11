@@ -94,7 +94,7 @@ public class Cliente{
         return respuesta;
     }
     
-    public void enviarTiempo(Calendar inicio, Calendar fin) throws IOException{
+    public Score enviarTiempo(Calendar inicio, Calendar fin) throws IOException{
         int hora = fin.get(Calendar.HOUR_OF_DAY) - inicio.get(Calendar.HOUR_OF_DAY);
         int minutos = ( ((hora*60)-inicio.get(Calendar.MINUTE))+(fin.get(Calendar.MINUTE)));
         int segundos = ( ((minutos*60)-inicio.get(Calendar.SECOND))+ fin.get(Calendar.SECOND));
@@ -106,7 +106,7 @@ public class Cliente{
         this.outputStream.flush();
         this.oos.writeObject(puntos);
         this.oos.flush();
-        
+        return puntos;
         
     }
     

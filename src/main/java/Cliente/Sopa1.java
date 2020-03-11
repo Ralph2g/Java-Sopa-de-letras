@@ -2,6 +2,7 @@ package Cliente;
 
 import java.util.Calendar;
 import Palabras.Palabra;
+import Palabras.Score;
 import java.io.*;
 import java.util.Collections;
 import java.net.Socket;
@@ -151,7 +152,27 @@ public static final String ANSI_RESET = "\u001B[0m";//Restablece los colores
         return anagrama;
     }
     
- 
+    public static void archivo(Score puntuacion, String nombre){
+        int num=1;
+        try {
+            String root =System.getProperty("user.dir");
+            System.out.println(""+root);
+            String ruta = root+"\\file.txt";
+            //String contenido = "Contenido de ejemplo";
+            File file = new File(ruta);
+            // Si el archivo no existe es creado
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileWriter fw = new FileWriter(file,true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(num+".- "+nombre+" - "+puntuacion.getMinutos()+" : "+puntuacion.getSegundos()+"\n");
+            num++;
+            bw.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public static void main(String[] args){
         try{
         Cliente c = new Cliente();
@@ -201,7 +222,7 @@ public static final String ANSI_RESET = "\u001B[0m";//Restablece los colores
                     //Desplegar la sopa y solicitar que meta las coordenadas y niciales y finales  de cada palabra que encuentre
                     System.out.println("Juego iniciado: Para salir escriba: CANCELAR");
                     System.out.println("Escriba la coordenada Inicial y final de donde inicie la palabra (x,y):");
-                    int correctas= 0;
+                    int correctas= 13;
                     int [] vectorCorrectas = new int[numPalabras];
                     while(!(aux.equalsIgnoreCase("cancelar") ) ){
                         //Lista anagramas
@@ -233,7 +254,8 @@ public static final String ANSI_RESET = "\u001B[0m";//Restablece los colores
                             Calendar fin=Calendar.getInstance();
                             System.out.println("Hora de Finalización del juego: "+fin.get(Calendar.HOUR_OF_DAY)+":"+fin.get(Calendar.MINUTE)+":"+fin.get(Calendar.SECOND));
                             aux="cancelar";
-                            c.enviarTiempo(ini,fin);
+                            Score tiempo = c.enviarTiempo(ini,fin);
+                            archivo(tiempo,nombre);
                         }
                     }
                 }else if(aux.equalsIgnoreCase("Conceptos")){
@@ -255,7 +277,7 @@ public static final String ANSI_RESET = "\u001B[0m";//Restablece los colores
                     //Desplegar la sopa y solicitar que meta las coordenadas y niciales y finales  de cada palabra que encuentre
                     System.out.println("Juego iniciado: Para salir escriba: CANCELAR");
                     System.out.println("Escriba la coordenada Inicial y final de donde inicie la palabra (x,y):");
-                    int correctas= 12;
+                    int correctas= 13;
                     int [] vectorCorrectas = new int[numPalabras];
                     while(!(aux.equalsIgnoreCase("cancelar") ) ){
                         //Lista anagramas
@@ -287,7 +309,8 @@ public static final String ANSI_RESET = "\u001B[0m";//Restablece los colores
                             Calendar fin=Calendar.getInstance();
                             System.out.println("Hora de Finalización del juego: "+fin.get(Calendar.HOUR_OF_DAY)+":"+fin.get(Calendar.MINUTE)+":"+fin.get(Calendar.SECOND));
                             aux="cancelar";
-                            c.enviarTiempo(ini,fin);
+                            Score tiempo = c.enviarTiempo(ini,fin);
+                            archivo(tiempo,nombre);
                         }
                     }//Fin coordenadas
                 }//Fin conceptos
@@ -304,21 +327,6 @@ public static final String ANSI_RESET = "\u001B[0m";//Restablece los colores
         }
         sc.close();
         c.cerrarConexion();
-      /*for(int i=0;i<6;i++){
-          String palabra=palabrasHN[i];
-          horizontalNormal(tablero,palabra);
-      }*/
-      /*for(int i=0;i<4;i++){
-          String palabra=palabrasaux[i];
-          verticalNormal(tablero,palabra);
-      }*/
-      //verticalNormal(tablero,palabra,0,0);
-      //horizontalInvertida(tablero,palabra,0,5);
-      //diagonalIzqAbajo(tablero,palabra,2,2);
-      //rellenar(tablero);
-      //verTablero(tablero);
-      
-      
       }catch(Exception e){
           e.printStackTrace();
       }

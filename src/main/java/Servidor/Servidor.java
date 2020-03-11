@@ -21,9 +21,9 @@ public class Servidor{
     public void initList(){
     
         this.palabras = new ArrayList<>();//95 LETRAS
-        this.palabras.add(new Palabra("COMPUTADOR","Máquina electrónica que, mediante determinados programas, permite almacenar y tratar información, y resolver problemas de diversa índole."));
+        this.palabras.add(new Palabra("COMPU","Máquina electrónica que, mediante determinados programas, permite almacenar y tratar información, y resolver problemas de diversa índole."));
         this.palabras.add(new Palabra("PAIS","Territorio, con características geográficas y culturales propias, que puede constituir una entidad política dentro de un Estado"));
-        this.palabras.add(new Palabra("LABORATORIO","ugar dotado de los medios necesarios para realizar investigaciones, experimentos y trabajos de carácter científico o técnico."));
+        this.palabras.add(new Palabra("LAPIZ","instrumento de escritura o de dibujo consistente en una mina o barrita de pigmento (generalmente de grafito y una grasa o arcilla especial."));
         this.palabras.add(new Palabra("LIBRO","Conjunto de muchas hojas de papel u otro material semejante que, encuadernadas, forman un volumen."));
         this.palabras.add(new Palabra("TIENDA","Casa, puesto o lugar donde se venden al público artículos de comercio al por menor."));
         this.palabras.add(new Palabra("LLAVE","nstrumento, comúnmente metálico, que, introducido en una cerradura, permite activar el mecanismo que la abre y la cierra."));
