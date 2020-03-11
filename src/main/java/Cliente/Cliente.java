@@ -95,12 +95,10 @@ public class Cliente{
     }
     
     public void enviarTiempo(Calendar inicio, Calendar fin) throws IOException{
-        int hora = fin.HOUR_OF_DAY - inicio.HOUR_OF_DAY;
-        int minutos = ( ((hora*60)-inicio.MINUTE)+(fin.MINUTE));
-        int segundos = ( ((minutos*60)-inicio.SECOND)+(fin.SECOND));
-        System.out.println(fin.HOUR_OF_DAY+" : "+inicio.HOUR_OF_DAY);
-        System.out.println(fin.MINUTE+" : "+inicio.MINUTE);
-        System.out.println(fin.SECOND+" : "+inicio.SECOND);
+        int hora = fin.get(Calendar.HOUR_OF_DAY) - inicio.get(Calendar.HOUR_OF_DAY);
+        int minutos = ( ((hora*60)-inicio.get(Calendar.MINUTE))+(fin.get(Calendar.MINUTE)));
+        int segundos = ( ((minutos*60)-inicio.get(Calendar.SECOND))+ fin.get(Calendar.SECOND));
+        
         Score puntos = new Score();
         puntos.setMinutos(minutos);
         puntos.setSegundos(segundos);
