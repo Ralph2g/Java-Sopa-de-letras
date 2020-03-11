@@ -149,13 +149,16 @@ public static final String ANSI_RESET = "\u001B[0m";//Restablece los colores
         System.out.println("Bienvenido a la Sopa de Letras!!!");
         Scanner sc = new Scanner(System.in);
         String aux = "";
+        System.out.println("Ingrese su nombre de usuario");
+        String nombre = sc.nextLine();
         int numPalabras = 14;
         while(!aux.equalsIgnoreCase("Close")){
             System.out.println("Para iniciar un juego escriba : Iniciar ");
             System.out.println("Para Finalizar escriba : close ");
             aux = sc.nextLine();
+            System.out.println(c.recibirMensaje());
             if(aux.equalsIgnoreCase("iniciar")){
-                System.out.println(c.recibirMensaje());
+                c.enviarNombre(nombre);
                 listPalabras = c.recibirPalabras();//REcibimos las palabras de la sopa desde el servidor
                 System.out.println("Juego iniciado escoja un modo de juego: Anagrama, Conceptos");
                 aux = sc.nextLine();
@@ -216,9 +219,12 @@ public static final String ANSI_RESET = "\u001B[0m";//Restablece los colores
                             Calendar fin=Calendar.getInstance();
                             System.out.println("Hora de Finalización del juego: "+fin.get(Calendar.HOUR_OF_DAY)+":"+fin.get(Calendar.MINUTE)+":"+fin.get(Calendar.SECOND));
                             aux="cancelar";
+                            c.enviarTiempo(ini,fin);
                         }
                     }
                 }else if(aux.equalsIgnoreCase("Conceptos")){
+                    Calendar ini=Calendar.getInstance();
+                    System.out.println("Hora de Inicio: "+ini.get(Calendar.HOUR_OF_DAY)+":"+ini.get(Calendar.MINUTE)+":"+ini.get(Calendar.SECOND));
                     //Se guardan los conceptos de las palabras recibidas desde el servidor
                     String[] conceptos = new String[numPalabras];
                     for (int i=0; i<conceptos.length ;i++){
@@ -267,11 +273,12 @@ public static final String ANSI_RESET = "\u001B[0m";//Restablece los colores
                             Calendar fin=Calendar.getInstance();
                             System.out.println("Hora de Finalización del juego: "+fin.get(Calendar.HOUR_OF_DAY)+":"+fin.get(Calendar.MINUTE)+":"+fin.get(Calendar.SECOND));
                             aux="cancelar";
+                            c.enviarTiempo(ini,fin);
                         }
-                    }
-                }
+                    }//Fin coordenadas
+                }//Fin conceptos
                 
-            }
+            }//Fin iniciar
             //Menu de reinicio
             System.out.println("FIN DEL JUEGO");
             System.out.println("Teclee: 'reintentar' para intentarlo de nuevo o 'close' para finalizar");
