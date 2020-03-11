@@ -17,13 +17,24 @@ public class Sopa1 {
 public static final String ANSI_GREEN = "\u001B[32m";//Color verde en el texto 
 public static final String ANSI_RED = "\u001B[31m";//Color rojo en el el texto
 public static final String ANSI_RESET = "\u001B[0m";//Restablece los colores
-    public static void horizontalNormal(String tablero[][],String palabra){
+    public static void horizontalNormal(String tablero[][],String palabra,String coorF[],String coorC[],int sig){
         Random auxf=new Random();
         Random auxc=new Random();
-        int fila=(int)(auxf.nextDouble()*(tablero.length));
+        int fila=(int)(auxf.nextDouble()*(tablero.length-1));
         int col=(int)(auxc.nextDouble()*((tablero.length)-(palabra.length())));
+        coorF[sig]=""+fila+","+col;
+        coorC[sig]=""+fila+","+(col+palabra.length()-1);
         for(int i=0; i<palabra.length();i++){
+            if(tablero[fila][col+i]==null){
                 tablero[fila][col+i]=""+palabra.charAt(i);
+            }else{
+                for(int j=0;j<palabra.length();j++){
+                    tablero[fila+1][col+j]=""+palabra.charAt(j);
+                }
+                coorF[sig]=""+fila+","+col;
+                coorC[sig]=""+fila+","+(col+palabra.length()-1);
+                break;
+            }
         }
     }
     public static void horizontalInvertida(String tablero[][],String palabra){
@@ -114,8 +125,8 @@ public static final String ANSI_RESET = "\u001B[0m";//Restablece los colores
             for(int j=0;j<tablero.length;j++){
                 int aux=(int)(rnd.nextDouble()*26);
                 if(tablero[i][j]==null){
-                    //tablero[i][j]=alfab[aux];
-                    tablero[i][j]="O";
+                    tablero[i][j]=alfab[aux];
+                    //tablero[i][j]="O";
                 }
             }
         }
@@ -148,10 +159,13 @@ public static final String ANSI_RESET = "\u001B[0m";//Restablece los colores
         ArrayList<Palabra> listPalabras = new ArrayList<Palabra>();;
         System.out.println("Bienvenido a la Sopa de Letras!!!");
         Scanner sc = new Scanner(System.in);
+        String tablero[][]=new String[15][15];//tablero
         String aux = "";
         System.out.println("Ingrese su nombre de usuario");
         String nombre = sc.nextLine();
         int numPalabras = 14;
+        String listCoordenadasInicio[]=new String[numPalabras];
+        String listCoordenadasFinal[]=new String[numPalabras];
         while(!aux.equalsIgnoreCase("Close")){
             System.out.println("Para iniciar un juego escriba : Iniciar ");
             System.out.println("Para Finalizar escriba : close ");
@@ -175,20 +189,19 @@ public static final String ANSI_RESET = "\u001B[0m";//Restablece los colores
                     Calendar ini=Calendar.getInstance();
                     System.out.println("Hora de Inicio: "+ini.get(Calendar.HOUR_OF_DAY)+":"+ini.get(Calendar.MINUTE)+":"+ini.get(Calendar.SECOND));
                     //Crear metodo que extraiga las palabras de la del arreglo y a cada una le asigne un anagrama para poner en la sopa
-                    String [] anagramas= generarAnagramas(palabras); ///FALTATERMINAR EL METODO
+                    String [] anagramas= generarAnagramas(palabras);
                     //Obtener las coordenadas de cada palabra iniciales y finales
-                    String [] listCoordenadasInicio = new String[numPalabras];
-                    for(int i= 0;i <numPalabras;i++)
-                        listCoordenadasInicio[i] = (""+i+","+(i+2));
-                    String [] listCoordenadasFinal = new String[numPalabras];
-                    for(int i= 0;i <numPalabras;i++)
-                        listCoordenadasFinal[i] = (""+i+","+(i+2));
+                    for(int i=0;i<palabras.length;i++){
+                        String palabra=palabras[i];
+                        horizontalNormal(tablero,palabra,listCoordenadasInicio,listCoordenadasFinal,i);
+                    }
+                    rellenar(tablero);
                     //enviar las coordenadas iniciales y finales de cada palabra al servidor para verificar 
                     c.enviarCoordenadas(listCoordenadasInicio, listCoordenadasFinal);
                     //Desplegar la sopa y solicitar que meta las coordenadas y niciales y finales  de cada palabra que encuentre
                     System.out.println("Juego iniciado: Para salir escriba: CANCELAR");
                     System.out.println("Escriba la coordenada Inicial y final de donde inicie la palabra (x,y):");
-                    int correctas= 12;
+                    int correctas= 0;
                     int [] vectorCorrectas = new int[numPalabras];
                     while(!(aux.equalsIgnoreCase("cancelar") ) ){
                         //Lista anagramas
@@ -198,6 +211,7 @@ public static final String ANSI_RESET = "\u001B[0m";//Restablece los colores
                             else 
                                 System.out.println(ANSI_GREEN + "Anagrama ["+(i+1)+"]: "+anagramas[i]+ ANSI_RESET);
                         }
+                        verTablero(tablero);
                         System.out.println("Ejemplo: 1,2");
                         System.out.println("Coordenada Inicial:");
                         aux = sc.nextLine();
@@ -231,12 +245,11 @@ public static final String ANSI_RESET = "\u001B[0m";//Restablece los colores
                         conceptos[i]= listPalabras.get(i).getConcepto();//guardamos cada palabra en la lista
                     }
                     //Obtener las coordenadas de cada palabra iniciales y finales
-                    String [] listCoordenadasInicio = new String[numPalabras];
-                    for(int i= 0;i <numPalabras;i++)
-                        listCoordenadasInicio[i] = (""+i+","+(i+2));
-                    String [] listCoordenadasFinal = new String[numPalabras];
-                    for(int i= 0;i <numPalabras;i++)
-                        listCoordenadasFinal[i] = (""+i+","+(i+2));
+                    for(int i=0;i<palabras.length;i++){
+                        String palabra=palabras[i];
+                        horizontalNormal(tablero,palabra,listCoordenadasInicio,listCoordenadasFinal,i);
+                    }
+                    rellenar(tablero);
                     //Enviamos las coordenadas iniciales y finales al servidor
                     c.enviarCoordenadas(listCoordenadasInicio, listCoordenadasFinal);
                     //Desplegar la sopa y solicitar que meta las coordenadas y niciales y finales  de cada palabra que encuentre
@@ -252,6 +265,7 @@ public static final String ANSI_RESET = "\u001B[0m";//Restablece los colores
                             else 
                                 System.out.println(ANSI_GREEN + "Concepto ["+(i+1)+"]: "+conceptos[i]+ ANSI_RESET);
                         }
+                        verTablero(tablero);
                         System.out.println("Ejemplo: 1,2");
                         System.out.println("Coordenada Inicial:");
                         aux = sc.nextLine();
@@ -290,20 +304,10 @@ public static final String ANSI_RESET = "\u001B[0m";//Restablece los colores
         }
         sc.close();
         c.cerrarConexion();
-      
-      String[] palabrasaux={"SOPA","SOL","SAL","SALON"};
-      String palabrasHN="LETRAS";
-      String[] palabrasVN={"LETRAS"};
-      String[] palabrasDIA={"LETRAS"};
-      String[] palabrasHI={"LETRAS"};
-      String tablero[][]=new String[15][15];
-      Random auxf=new Random();
-      Random auxc=new Random();
       /*for(int i=0;i<6;i++){
           String palabra=palabrasHN[i];
           horizontalNormal(tablero,palabra);
       }*/
-      diagonalDerAbajo(tablero,palabrasHN);
       /*for(int i=0;i<4;i++){
           String palabra=palabrasaux[i];
           verticalNormal(tablero,palabra);
@@ -311,8 +315,8 @@ public static final String ANSI_RESET = "\u001B[0m";//Restablece los colores
       //verticalNormal(tablero,palabra,0,0);
       //horizontalInvertida(tablero,palabra,0,5);
       //diagonalIzqAbajo(tablero,palabra,2,2);
-      rellenar(tablero);
-      verTablero(tablero);
+      //rellenar(tablero);
+      //verTablero(tablero);
       
       
       }catch(Exception e){
