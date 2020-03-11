@@ -64,9 +64,11 @@ public class ClientWorker implements Runnable{
         case COORDINATES:
             System.out.println("Cliente envía las coordenadas de las palabras");
             this.recibirCoordenadas();
+            break;
         case ANSWER:
             System.out.println("Cliente envia coordenada");
             this.enviarRespuesta();
+            break;
         default:
             break;    
         }
@@ -75,15 +77,18 @@ public class ClientWorker implements Runnable{
     //Envío de las palabras a el cliente
     private void sendPalabras()throws IOException{
         this.outputStream.writeInt(this.listpalabras.size());//enviamos al cliente el tamaño de la lista
+        this.outputStream.flush();
         Iterator<Palabra> aux = this.listpalabras.iterator();
         while(aux.hasNext()){
             this.oos.writeObject(aux.next());//Enviamos el objeto uno auno
+            this.oos.flush();
         }
     }
     //Mensaje de Bienvenida a el servidor
     public void message() throws IOException{
         try{
         this.outputStream.writeUTF("Se ha conectado al servidor");
+        this.outputStream.flush();
         System.out.println("Respuesta envida");
         }catch( IOException e){
         e.printStackTrace();
@@ -107,13 +112,14 @@ public class ClientWorker implements Runnable{
     public void enviarRespuesta() throws IOException{
         String coordInicio = this.inputStream.readUTF();
         String coordFinal = this.inputStream.readUTF();
-        Boolean bandera = false;
+        int bandera = -1;
         //Se compara con cada una de las coordenadas iniciales y finales de nuestra lista de palabras
         for (int i= 0; i< this.listpalabras.size();i++)
-            if ((this.listpalabras.get(i).getCoordInicio() == coordInicio) && (this.listpalabras.get(i).getCoordFin() == coordFinal))
-                bandera = true;
+            if ((this.listpalabras.get(i).getCoordInicio().equalsIgnoreCase(coordInicio)) && (this.listpalabras.get(i).getCoordFin().equalsIgnoreCase(coordFinal)))
+                bandera = i;
         //Regresamos la respuesta
-        this.outputStream.writeBoolean(bandera);
+        this.outputStream.writeInt(bandera);
+        this.outputStream.flush();
         
     }
     

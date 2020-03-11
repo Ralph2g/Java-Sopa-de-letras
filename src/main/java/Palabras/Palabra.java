@@ -35,6 +35,6 @@ public class Palabra implements Serializable{
         this.coordInicio = coordInicio;
     }
     public void setCoordFin(String coordFin){
-        this.coordInicio = coordFin;
+        this.coordFin = coordFin;
     }
 }

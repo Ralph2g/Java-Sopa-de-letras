@@ -33,6 +33,7 @@ public class Cliente{
         String fromServer ="";
         try{
             this.outputStream.writeUTF(Options.MESSAGE.toString());
+            this.outputStream.flush();
             fromServer = this.inputStream.readUTF();
         }catch(IOException e){
            e.printStackTrace();
@@ -42,12 +43,14 @@ public class Cliente{
     public void cerrarConexion(){
         try{
             this.outputStream.writeUTF(Options.CLOSE.toString());
+            this.outputStream.flush();
         }catch(IOException e){
            e.printStackTrace();
         }
     }
     public ArrayList<Palabra> recibirPalabras()throws IOException, ClassNotFoundException{
         this.outputStream.writeUTF(Options.GETLIST.toString());
+        this.outputStream.flush();
         int cont = this.inputStream.readInt();
         Palabra auxpal;
         while(cont>0){
@@ -58,18 +61,28 @@ public class Cliente{
     }
     public void enviarCoordenadas(String [] listcoordenadasInicio,String [] listcoordenadasFinal)throws IOException{
         this.outputStream.writeUTF(Options.COORDINATES.toString());
+        this.outputStream.flush();
         this.outputStream.writeInt(listcoordenadasInicio.length);
+        this.outputStream.flush();
         //Enviamos las coordenadas iniciales
-        for (int i = 0; i<listcoordenadasInicio.length;i++)
-            this.outputStream.writeUTF(listcoordenadasInicio[i]);  
-        for (int i = 0; i<listcoordenadasFinal.length;i++)
+        for (int i = 0; i<listcoordenadasInicio.length;i++){
+            this.outputStream.writeUTF(listcoordenadasInicio[i]);
+            this.outputStream.flush();
+        }
+        for (int i = 0; i<listcoordenadasFinal.length;i++){
             this.outputStream.writeUTF(listcoordenadasFinal[i]);
+            this.outputStream.flush();
+        }
     }
-    
-    public boolean enviarRespuesta(String ini,String fin) throws IOException{
+    //Regresa el indice de la palabra que está correcta
+    public int enviarRespuesta(String ini,String fin) throws IOException{
+        this.outputStream.writeUTF(Options.ANSWER.toString());
+        this.outputStream.flush();
         this.outputStream.writeUTF(ini);
+        this.outputStream.flush();
         this.outputStream.writeUTF(fin);
-        boolean respuesta = this.inputStream.readBoolean();
+        this.outputStream.flush();
+        int respuesta = this.inputStream.readInt();
         return respuesta;
     }
     

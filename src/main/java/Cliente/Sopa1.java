@@ -12,9 +12,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
 public class Sopa1 {
-
+public static final String ANSI_GREEN = "\u001B[32m";//Color verde en el texto 
+public static final String ANSI_RED = "\u001B[31m";//Color rojo en el el texto
+public static final String ANSI_RESET = "\u001B[0m";//Restablece los colores
     public static void horizontalNormal(String tablero[][],String palabra){
         Random auxf=new Random();
         Random auxc=new Random();
@@ -130,11 +131,12 @@ public class Sopa1 {
     }
     //Regresa una lista de anagramas a partir de un arreglo de Strings
     public static String[] generarAnagramas(String [] pal){
+        String[] anagrama = new String[pal.length];
         for (int i = 0; i < pal.length;i++){
-            pal[i] = crearAnagrama(pal[i]);
+            anagrama[i] = crearAnagrama(pal[i]);
         }
         
-        return pal;
+        return anagrama;
     }
     
  
@@ -168,29 +170,29 @@ public class Sopa1 {
                 if(aux.equalsIgnoreCase("Anagrama")){
                     //Crear metodo que extraiga las palabras de la del arreglo y a cada una le asigne un anagrama para poner en la sopa
                     String [] anagramas= generarAnagramas(palabras); ///FALTATERMINAR EL METODO
-                    //LLEnar la sopa con las palabras recibidas del servidor 
-                    //Desplegar la lista de ANAGRAMAs a encontrar en la sopa
-                    for(int i=0;i<anagramas.length ;i++ ){
-                        System.out.println("Anagrama ["+(i+1)+"]: "+anagramas[i]);
-                    }
                     //Obtener las coordenadas de cada palabra iniciales y finales
-
                     String [] listCoordenadasInicio = new String[numPalabras];
                     for(int i= 0;i <numPalabras;i++)
-                        listCoordenadasInicio[i] = ("["+i+"]"+"["+(i+2)+"]");
-                    
+                        listCoordenadasInicio[i] = (""+i+","+(i+2));
                     String [] listCoordenadasFinal = new String[numPalabras];
                     for(int i= 0;i <numPalabras;i++)
-                        listCoordenadasFinal[i] = ("["+(i+2)+"]"+"["+(i+4)+"]");
-                    
-//enviar las coordenadas iniciales y finales de cada palabra al servidor para verificar 
+                        listCoordenadasFinal[i] = (""+i+","+(i+2));
+                    //enviar las coordenadas iniciales y finales de cada palabra al servidor para verificar 
                     c.enviarCoordenadas(listCoordenadasInicio, listCoordenadasFinal);
                     //Desplegar la sopa y solicitar que meta las coordenadas y niciales y finales  de cada palabra que encuentre
                     System.out.println("Juego iniciado: Para salir escriba: cancelar");
                     System.out.println("Escriba la coordenada Inicial y final de donde inicie la palabra (x,y):");
-                    System.out.println("Ejemplo: 1,2");
                     int correctas= 13;
-                    while( !(correctas >13) | !(aux.equalsIgnoreCase("cancelar") ) ){
+                    int [] vectorCorrectas = new int[numPalabras];
+                    while( !(correctas <13) | !(aux.equalsIgnoreCase("cancelar") ) ){
+                        //Lista anagramas
+                        for(int i=0;i<anagramas.length ;i++ ){
+                            if(vectorCorrectas[i] != 1)
+                                System.out.println(ANSI_RED + "Anagrama ["+(i+1)+"]: "+anagramas[i]+ ANSI_RESET);
+                            else 
+                                System.out.println(ANSI_GREEN + "Anagrama ["+(i+1)+"]: "+anagramas[i]+ ANSI_RESET);
+                        }
+                        System.out.println("Ejemplo: 1,2");
                         System.out.println("Coordenada Inicial:");
                         aux = sc.nextLine();
                         String coordinicial = aux;
@@ -198,13 +200,17 @@ public class Sopa1 {
                             System.out.println("Coordenada final");
                             aux = sc.nextLine();
                             String coordfinal = aux;
-                            boolean verificacion = c.enviarRespuesta(coordinicial, coordfinal);
-                            if(verificacion)
+                            int verificacion = c.enviarRespuesta(coordinicial, coordfinal);
+                            System.out.println(verificacion);
+                            if( (verificacion != -1) ){
+                                //Metodo para marcar las celdas encontradas o rayar las letras
+                                vectorCorrectas[verificacion] = 1;
+                                System.out.println("Correcto!! La palabra "+ palabras[verificacion]+ " encontrada en la sopa");
                                 correctas++;
+                            }
                         }
-                        System.out.println(correctas);
-                        correctas++;//LINEA DE PRUEBA BORRAR
-                        System.out.println(correctas);
+                        if(correctas < 13)
+                            aux="cancelar";
                     }
                             //Coordenada inicial
                             
