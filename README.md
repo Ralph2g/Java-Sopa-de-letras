@@ -6,7 +6,13 @@ La interfaz fue desarrollada en la terminal de Java.
 # Imagenes de el programa:
 ## Cliente:
 <center>
-
+https://github.com/Ralph2g/Java-Sopa-de-letras/blob/master/Cliente.PNG
+</center>
+<center>
+https://github.com/Ralph2g/Java-Sopa-de-letras/blob/master/Cliente-Respuesta.PNG
 </center>
 
 ## Servidor
+<center>
+https://github.com/Ralph2g/Java-Sopa-de-letras/blob/master/Servidor.PNG
+</center>
