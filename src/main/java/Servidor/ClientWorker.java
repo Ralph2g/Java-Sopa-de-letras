@@ -113,13 +113,17 @@ public class ClientWorker implements Runnable{
     public void recibirCoordenadas() throws IOException, ClassNotFoundException{
         //Recibimos el numero de letras
         int cont = this.inputStream.readInt();
+ 
         //Recibimos cada una de las coordenadas de inicio
         for (int i=0; i< cont ;i++){
             this.listpalabras.get(i).setCoordInicio(this.inputStream.readUTF());
+            System.out.println(this.listpalabras.get(i).getCoordInicio());
         }
+        System.out.println("------------");
         //Recibimos y guardamos las coordenadas finales
         for (int i=0; i< cont ;i++){
             this.listpalabras.get(i).setCoordFin(this.inputStream.readUTF());
+            System.out.println(this.listpalabras.get(i).getCoordFin());
         }
     }
     
